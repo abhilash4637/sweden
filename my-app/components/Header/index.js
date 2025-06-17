@@ -88,6 +88,16 @@ export default function Header() {
                     Dashboard
                     </Link>
                 </MenuItem>,
+                 <MenuItem key="profile">
+                    <Link href="/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    Profile
+                    </Link>
+                </MenuItem>,
+                 <MenuItem key="Logout" onClick={handleLogout}>
+                    <Link href="" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    Logout
+                    </Link>
+                </MenuItem>,
                 ]}
 
           </Menu>
