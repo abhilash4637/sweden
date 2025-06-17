@@ -78,8 +78,12 @@ export default function RegisterPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button variant="contained" color="primary" type="submit">
-          Register
+        <Button
+            variant="contained"
+            type="submit"
+            size="small" // or "medium"
+            >
+            Register
         </Button>
       </Box>
     </Container>

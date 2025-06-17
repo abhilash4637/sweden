@@ -44,7 +44,7 @@ export default function Header() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: '#37474f', color: '#fff' }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         {/* Logo */}
         <Typography variant="h6" component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
