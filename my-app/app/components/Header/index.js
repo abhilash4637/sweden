@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '@/redux/authSlice'; // Adjust the path as needed
+import { logout } from '@/redux/authSlice'; 
 import {
   AppBar,
   Toolbar,
@@ -16,13 +16,15 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
+  Badge,
 } from '@mui/material';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import LoginIcon from '@mui/icons-material/Login';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import LogoutIcon from '@mui/icons-material/Logout';
+import NotificationsIcon from '@mui/icons-material/Notifications'; // ✅ Import Notification
+import AuthModal from "../AuthModal";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -31,6 +33,8 @@ export default function Header() {
 
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [notifications, setNotifications] = useState(3); // example count
 
   const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
   const handleCloseNavMenu = () => setAnchorElNav(null);
@@ -39,21 +43,27 @@ export default function Header() {
 
   const handleLogout = () => {
     dispatch(logout());
-    router.push('/login');
+    router.push('/');
     handleCloseUserMenu();
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#37474f', color: '#fff' }}>
+    <AppBar position="static" sx={{
+        backgroundColor: '#ffff',
+        color: '#000',
+        borderBottom: '1px solid #ddd', 
+        boxShadow: 'none',
+        padding: '0 40px'
+      }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         {/* Logo */}
         <Typography variant="h6" component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
-          <Link href="/" style={{ color: 'white', textDecoration: 'none' }}>
-            MySite
+          <Link href="/" style={{ color: '#008855', textDecoration: 'none', fontWeight: '600', fontSize: '24px' }}>
+            Insyn
           </Link>
         </Typography>
 
-        {/* Mobile Menu Icon */}
+        {/* Mobile Menu */}
         <Box sx={{ display: { xs: 'flex', sm: 'none' } }}>
           <IconButton size="large" color="inherit" onClick={handleOpenNavMenu}>
             <MenuIcon />
@@ -67,61 +77,48 @@ export default function Header() {
             ? [
                 <MenuItem key="login" onClick={handleCloseNavMenu}>
                     <ListItemIcon>
-                    <LoginIcon fontSize="small" />
+                      <LoginIcon fontSize="small" />
                     </ListItemIcon>
                     <Link href="/login" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <ListItemText>Sign In</ListItemText>
+                      <ListItemText>Logga in</ListItemText>
                     </Link>
-                </MenuItem>,
-                <MenuItem key="register" onClick={handleCloseNavMenu}>
-                    <ListItemIcon>
-                    <PersonAddIcon fontSize="small" />
-                    </ListItemIcon>
-                    <Link href="/register" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <ListItemText>Register</ListItemText>
-                    </Link>
-                </MenuItem>,
-                ]
+                </MenuItem>
+              ]
             : [
-                <MenuItem key="dashboard" onClick={handleCloseNavMenu}>
-                    <Link href="/dashboard" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    Dashboard
-                    </Link>
+                <MenuItem key="profile">
+                  <Link href="/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    Profil
+                  </Link>
                 </MenuItem>,
-                 <MenuItem key="profile">
-                    <Link href="/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    Profile
-                    </Link>
+                <MenuItem key="Logout" onClick={handleLogout}>
+                  <Link href="" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    Logga ut
+                  </Link>
                 </MenuItem>,
-                 <MenuItem key="Logout" onClick={handleLogout}>
-                    <Link href="" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    Logout
-                    </Link>
-                </MenuItem>,
-                ]}
-
+              ]}
           </Menu>
         </Box>
 
         {/* Desktop Menu */}
         <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: 2 }}>
           {!isLoggedIn ? (
-            <div>
-              <Button color="inherit" component={Link} href="/login" startIcon={<LoginIcon />}>
-                Sign In
-              </Button>
-              <Button color="inherit" component={Link} href="/register" startIcon={<PersonAddIcon />}>
-                Register
-              </Button>
-            </div>
+            <Button color="inherit" startIcon={<LoginIcon />} onClick={() => setOpen(true)} >
+              Logga in
+            </Button>
           ) : (
-            <div>
-              <Button color="inherit" component={Link} href="/dashboard">
-                Dashboard
-              </Button>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              {/* ✅ Notification Icon with badge */}
+              <IconButton color="inherit">
+                <Badge badgeContent={notifications} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+
+              {/* ✅ Profile Icon */}
               <IconButton color="inherit" onClick={handleOpenUserMenu}>
                 <AccountCircle />
               </IconButton>
+
               <Menu
                 anchorEl={anchorElUser}
                 open={Boolean(anchorElUser)}
@@ -132,20 +129,21 @@ export default function Header() {
                     <AccountCircle fontSize="small" />
                   </ListItemIcon>
                   <Link href="/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <ListItemText>Profile</ListItemText>
+                    <ListItemText>Profil</ListItemText>
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>
                   <ListItemIcon>
                     <LogoutIcon fontSize="small" />
                   </ListItemIcon>
-                  <ListItemText>Logout</ListItemText>
+                  <ListItemText>Logga ut</ListItemText>
                 </MenuItem>
               </Menu>
-            </div>
+            </Box>
           )}
         </Box>
       </Toolbar>
+      <AuthModal open={open} handleClose={() => setOpen(false)} />
     </AppBar>
   );
 }

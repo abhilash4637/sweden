@@ -13,9 +13,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <Provider store={store}>
-          <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+          <div style={{  backgroundColor: "#fff", display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <Header />
-            <main style={{ flex: 1 }}>{children}</main>
+            <main style={{ flex: 1, padding: '0 40px'   }}>{children}</main>
             <Footer />
           </div>
         </Provider>

@@ -19,6 +19,8 @@ import {
   Divider,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import BusinessIcon from '@mui/icons-material/Business';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -76,91 +78,8 @@ export default function Dashboard() {
   const totalPages = Math.ceil(total / pageSize);
 
   return (
-    <Box display="flex" gap={3} p={3} sx={{ backgroundColor: "#f8f9fa" }}>
-      {/* Sidebar Filters */}
-      <Box
-        width={260}
-        flexShrink={0}
-        sx={{
-          background: "#fff",
-          borderRadius: 2,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-          p: 2,
-          position: "sticky",
-          top: 20,
-          height: "fit-content",
-        }}
-      >
-        <Typography variant="h6" fontWeight="600" gutterBottom>
-          Filters
-        </Typography>
-
-        <Divider sx={{ mb: 2 }} />
-
-        {/* Industry Filter */}
-        <Typography variant="subtitle2" fontWeight="500" gutterBottom>
-          Industry
-        </Typography>
-        <Select
-          fullWidth
-          value={industry}
-          onChange={(e) => { setPage(1); setIndustry(e.target.value); }}
-          displayEmpty
-          size="small"
-          sx={{ mb: 3 }}
-        >
-          <MenuItem value="">All Industries</MenuItem>
-          <MenuItem value="Skogsförvaltning">Skogsförvaltning</MenuItem>
-          <MenuItem value="IT Services">IT Services</MenuItem>
-        </Select>
-
-        {/* Location Filter */}
-        <Typography variant="subtitle2" fontWeight="500" gutterBottom>
-          Location
-        </Typography>
-        <Select
-          fullWidth
-          value={location}
-          onChange={(e) => { setPage(1); setLocation(e.target.value); }}
-          displayEmpty
-          size="small"
-          sx={{ mb: 3 }}
-        >
-          <MenuItem value="">All Locations</MenuItem>
-          <MenuItem value="Haninge, Stockholm">Haninge, Stockholm</MenuItem>
-        </Select>
-
-        {/* Rating */}
-        <Typography variant="subtitle2" fontWeight="500" gutterBottom>
-          Rating
-        </Typography>
-        <Slider
-          value={ratingRange}
-          onChange={(e, newVal) => { setPage(1); setRatingRange(newVal); }}
-          valueLabelDisplay="auto"
-          min={0}
-          max={5}
-          step={0.5}
-          sx={{ mb: 3 }}
-        />
-
-        {/* Jobs */}
-        <Typography variant="subtitle2" fontWeight="500" gutterBottom>
-          Jobs Count
-        </Typography>
-        <Slider
-          value={jobRange}
-          onChange={(e, newVal) => { setPage(1); setJobRange(newVal); }}
-          valueLabelDisplay="auto"
-          min={0}
-          max={200}
-        />
-      </Box>
-
-      {/* Main Content */}
-      <Box flex={1}>
-        {/* Search Bar */}
-        <Box mb={3} display="flex" justifyContent="center">
+    <div>
+        <Box mt={3} mb={3} display="flex" px={4} justifyContent={"center"}>
           <TextField
             fullWidth
             placeholder="Search companies, industries, locations..."
@@ -168,11 +87,19 @@ export default function Dashboard() {
             // onChange={(e) => setSearchTerm(e.target.value)}
             size="small"
             sx={{
-              maxWidth: 600,
+              width: "450px", // decrease width
+              height: "50px", // increase height
               backgroundColor: "#fff",
               borderRadius: "50px",
               "& .MuiOutlinedInput-root": {
                 borderRadius: "50px",
+                height: "55px", // controls actual input height
+                fontSize: "1rem", // larger text
+                paddingRight: "12px",
+                "&.Mui-focused fieldset": {
+                  borderColor: "#008855", // your custom focus color
+                  borderWidth: "2px",
+                },
               },
             }}
             InputProps={{
@@ -184,7 +111,60 @@ export default function Dashboard() {
             }}
           />
         </Box>
+        <Box display="flex" gap={3} p={3}>
+        
+      <Box
+          width={260}
+          flexShrink={0}
+          sx={{
+            background: "#fff",
+            p: 2,
+            position: "sticky",
+            top: 20,
+            height: "fit-content",
+          }}
+        >
+          <Typography variant="h6" gutterBottom>
+            Filters companies
+          </Typography>
 
+          <Divider sx={{ mb: 2 }} />
+
+          {/* Industry Filter */}
+          <Typography variant="subtitle2" gutterBottom>
+            Industry
+          </Typography>
+          <Select
+            fullWidth
+            value={industry}
+            onChange={(e) => { setPage(1); setIndustry(e.target.value); }}
+            displayEmpty
+            size="small"
+            sx={{ mb: 3 }}
+          >
+            <MenuItem value="">All Industries</MenuItem>
+            <MenuItem value="Skogsförvaltning">Skogsförvaltning</MenuItem>
+            <MenuItem value="IT Services">IT Services</MenuItem>
+          </Select>
+
+          {/* Location Filter */}
+          <Typography variant="subtitle2" fontWeight="500" gutterBottom>
+            Location
+          </Typography>
+          <Select
+            fullWidth
+            value={location}
+            onChange={(e) => { setPage(1); setLocation(e.target.value); }}
+            displayEmpty
+            size="small"
+            sx={{ mb: 3 }}
+          >
+            <MenuItem value="">All Locations</MenuItem>
+            <MenuItem value="Haninge, Stockholm">Haninge, Stockholm</MenuItem>
+          </Select>
+        </Box>
+      {/* Main Content */}
+      <Box flex={1}>
         {/* Companies Grid */}
         {loading ? (
           <Box display="flex" justifyContent="center" py={4}>
@@ -193,7 +173,7 @@ export default function Dashboard() {
         ) : (
           <Box
             display="grid"
-            gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
+            gridTemplateColumns="repeat(auto-fill, minmax(450px, 1fr))"
             gap={3}
           >
             {companies.map((company) => (
@@ -202,38 +182,32 @@ export default function Dashboard() {
                 onClick={() => router.push(`/company/${company.OrgNr}`)}
                 sx={{
                   cursor: "pointer",
-                  borderRadius: 2,
-                  boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+                  // borderRadius: 1.5,
+                  boxShadow: "none",
                   transition: "all 0.2s",
                   "&:hover": {
-                    boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
-                    transform: "translateY(-4px)",
+                    backgroundColor: "#f2f4f5"
                   },
                 }}
               >
                 <CardContent>
-                  <Typography variant="h6" fontWeight="600">
+                  <Typography variant="h5" mb={0.5}>
                     {company.name}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    OrgNr: {company.OrgNr}
-                  </Typography>
 
-                  <Box mt={1} display="flex" gap={1} flexWrap="wrap">
-                    <Chip size="small" label={company.industry} />
-                    <Chip size="small" label={company.location} />
-                  </Box>
-
-                  <Box mt={1} display="flex" alignItems="center">
-                    <Rating value={company.rating} precision={0.5} readOnly />
-                    <Typography variant="body2" ml={1}>
-                      {company.rating}
+                  <Box display="flex" alignItems="center" gap={1} mb={0.5}>
+                    <BusinessIcon fontSize="small" color="action" />
+                    <Typography sx={{ lineHeight: 1.4 }} variant="body2" color="text.secondary">
+                      Org.nr <strong>{company.OrgNr}</strong>
                     </Typography>
                   </Box>
 
-                  <Typography variant="body2" mt={1} fontWeight="500">
-                    {company.jobs} jobs
-                  </Typography>
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <LocationOnIcon fontSize="small" color="action" />
+                    <Typography sx={{ lineHeight: 1.4 }} variant="body2" color="text.secondary">
+                      {company.location}
+                    </Typography>
+                  </Box>
                 </CardContent>
               </Card>
             ))}
@@ -253,5 +227,6 @@ export default function Dashboard() {
         )}
       </Box>
     </Box>
+    </div>
   );
 }

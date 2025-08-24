@@ -13,13 +13,12 @@ export default function Footer() {
       component="footer"
       sx={{
         backgroundColor: '#f5f5f5',
-        py: 2,
+        padding: '20px 40px',
         borderTop: '1px solid #ddd',
         mt: 'auto',
       }}
     >
       <Container
-        maxWidth="lg"
         sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
       >
         <Typography variant="body2" color="text.secondary">
